@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پخش زنده رادیو</title>
+
+    <!-- بارگذاری JWPlayer -->
+    <script src="https://cdn.jwplayer.com/libraries/IDzF9Zmk.js"></script>
+    <!-- بارگذاری Font Awesome برای آیکون‌ها -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <style>
+      body {
+        background: #1e1e1e;
+        margin: 0;
+        font-family: "Vazir", sans-serif;
+        height: 100vh;
+      }
+
+      .container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 220px;
+        height: 220px;
+        background: #1e1e1e;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 8px 8px 15px #141414, -8px -8px 15px #282828;
+        animation: pulse 2s infinite;
+        transition: box-shadow 0.4s ease;
+        cursor: pointer;
+      }
+
+      .container:hover {
+        box-shadow: 10px 10px 20px #131313, -10px -10px 20px #2a2a2a;
+      }
+
+      .play-button,
+      .pause-button {
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        background: #00bcd4;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: inset -4px -4px 10px #12e0ff, inset 4px 4px 10px #0097a7;
+        transition: background 0.3s;
+        cursor: pointer;
+        visibility: visible;
+      }
+
+      .play-button:hover,
+      .pause-button:hover {
+        background: #00acc1;
+      }
+
+      .play-icon,
+      .pause-icon {
+        font-size: 40px;
+        color: white;
+        position: absolute;
+      }
+
+      #player {
+        display: none;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(0, 188, 212, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 20px rgba(0, 188, 212, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(0, 188, 212, 0);
+        }
+      }
+
+      @media (max-width: 600px) {
+        .container {
+          width: 180px;
+          height: 180px;
+        }
+
+        .play-button,
+        .pause-button {
+          width: 60px;
+          height: 60px;
+        }
+
+        .play-icon,
+        .pause-icon {
+          font-size: 30px;
+        }
+
+        #player {
+          width: 100%;
+          height: 200px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- دکمه پخش با آیکون مثلثی -->
+      <div class="play-button" onclick="startPlayer()">
+        <div class="play-icon"><i class="fas fa-play"></i></div>
+      </div>
+      <!-- دکمه مکث با آیکون مربعی -->
+      <div class="pause-button" style="visibility: hidden;" onclick="pausePlayer()">
+        <div class="pause-icon"><i class="fas fa-square"></i></div>
+      </div>
+    </div>
+
+    <div id="player"></div>
+
+    <script>
+      let player;
+      let isPlaying = false;
+
+      function startPlayer() {
+        // مخفی کردن دکمه پلی و نمایش دکمه پاز
+        document.querySelector(".play-button").style.visibility = "hidden";
+        document.querySelector(".pause-button").style.visibility = "visible";
+        document.getElementById("player").style.display = "block";
+
+        // اگر پلیر وجود ندارد، ایجاد کنیم
+        if (!player) {
+          player = jwplayer("player").setup({
+            file: "https://s0.cdn1.iranseda.ir/liveedge/radio-avaa/playlist.m3u8", // لینک استریم
+            width: "100%",
+            height: 50,
+            autostart: false, // پخش خودکار غیرفعال است
+            mute: false,
+            controls: true,
+            displaytitle: false,
+            displaydescription: false,
+            visualplaylist: false,
+            skin: { name: "seven" },
+            stretching: "none",
+            aspectratio: "",
+            primary: "html5",
+            livestream: true, // پخش زنده
+          });
+
+          player.on('play', function () {
+            isPlaying = true;
+          });
+
+          player.on('pause', function () {
+            isPlaying = false;
+          });
+        }
+
+        // اگر پلیر قبلاً ساخته شده بود، فقط پخش را شروع کن
+        if (!isPlaying) {
+          player.play(); // شروع پخش استریم
+        }
+      }
+
+      function pausePlayer() {
+        if (player) {
+          player.pause(); // توقف پخش
+        }
+        document.querySelector(".play-button").style.visibility = "visible"; // نمایش دکمه پلی
+        document.querySelector(".pause-button").style.visibility = "hidden"; // مخفی کردن دکمه پاز
+        isPlaying = false;
+      }
+    </script>
+  </body>
+</html>
