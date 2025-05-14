@@ -3,11 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>پخش زنده رادیو</title>
+    <title>radio ava</title>
 
-    <!-- بارگذاری JWPlayer -->
     <script src="https://cdn.jwplayer.com/libraries/IDzF9Zmk.js"></script>
-    <!-- بارگذاری Font Awesome برای آیکون‌ها -->
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <style>
@@ -111,11 +110,9 @@
 
   <body>
     <div class="container">
-      <!-- دکمه پخش با آیکون مثلثی -->
       <div class="play-button" onclick="startPlayer()">
         <div class="play-icon"><i class="fas fa-play"></i></div>
       </div>
-      <!-- دکمه مکث با آیکون مربعی -->
       <div class="pause-button" style="visibility: hidden;" onclick="pausePlayer()">
         <div class="pause-icon"><i class="fas fa-square"></i></div>
       </div>
@@ -128,18 +125,16 @@
       let isPlaying = false;
 
       function startPlayer() {
-        // مخفی کردن دکمه پلی و نمایش دکمه پاز
         document.querySelector(".play-button").style.visibility = "hidden";
         document.querySelector(".pause-button").style.visibility = "visible";
         document.getElementById("player").style.display = "block";
 
-        // اگر پلیر وجود ندارد، ایجاد کنیم
         if (!player) {
           player = jwplayer("player").setup({
-            file: "https://s0.cdn1.iranseda.ir/liveedge/radio-avaa/playlist.m3u8", // لینک استریم
+            file: "https://s0.cdn1.iranseda.ir/liveedge/radio-avaa/playlist.m3u8",
             width: "100%",
             height: 50,
-            autostart: false, // پخش خودکار غیرفعال است
+            autostart: false,
             mute: false,
             controls: true,
             displaytitle: false,
@@ -149,7 +144,7 @@
             stretching: "none",
             aspectratio: "",
             primary: "html5",
-            livestream: true, // پخش زنده
+            livestream: true,
           });
 
           player.on('play', function () {
@@ -161,18 +156,17 @@
           });
         }
 
-        // اگر پلیر قبلاً ساخته شده بود، فقط پخش را شروع کن
         if (!isPlaying) {
-          player.play(); // شروع پخش استریم
+          player.play();
         }
       }
 
       function pausePlayer() {
         if (player) {
-          player.pause(); // توقف پخش
+          player.pause();
         }
-        document.querySelector(".play-button").style.visibility = "visible"; // نمایش دکمه پلی
-        document.querySelector(".pause-button").style.visibility = "hidden"; // مخفی کردن دکمه پاز
+        document.querySelector(".play-button").style.visibility = "visible";
+        document.querySelector(".pause-button").style.visibility = "hidden";
         isPlaying = false;
       }
     </script>
